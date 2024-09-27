@@ -1,0 +1,30 @@
+universe                = docker
+docker_image            = alabijesujoba/fairseq_wv:v2
+executable              = /data/users/jalabi/Internship_NII/speechbrain/recipes/AfroLID_FLEURS/scripts/train_lid_exp1.sh
+initialdir              = /data/users/jalabi/Internship_NII/speechbrain/recipes/AfroLID_FLEURS
+output                  = /data/users/jalabi/Internship_NII/speechbrain/recipes/AfroLID_FLEURS/logs/exp1.$(ClusterId).$(ProcId).$(Year)_$(Month)_$(Day)_$(SUBMIT_TIME).log
+error                   = /data/users/jalabi/Internship_NII/speechbrain/recipes/AfroLID_FLEURS/logs/exp1.$(ClusterId).$(ProcId).$(Year)_$(Month)_$(Day)_$(SUBMIT_TIME).out
+log                     = /data/users/jalabi/Internship_NII/speechbrain/recipes/AfroLID_FLEURS/logs/exp1.$(ClusterId).$(ProcId).$(Year)_$(Month)_$(Day)_$(SUBMIT_TIME).err
+request_GPUs = 1
+request_CPUs = 10
+request_memory = 50G
+requirements = (GPUs_GlobalMemoryMb >= 39000) && (machine == "cl18lx.lsv.uni-saarland.de")
+
+
+# arguments = mhubert_147
+# queue
+
+# arguments = ssa_hubert_60k
+# queue
+
+# arguments = hubert_lg_ll60k
+# queue
+
+# arguments = xlsr_lg_53
+# queue
+
+# arguments = xlsr_lg_300m
+# queue
+
+arguments = af_xlsr_lg_300m
+queue

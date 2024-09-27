@@ -1,0 +1,12 @@
+universe                = docker
+docker_image            = alabijesujoba/fairseq_wv:v3
+executable              = /data/users/jalabi/Internship_NII/speechbrain/recipes/VoxLingua107/lang_id_fleur/shared_files.sh
+initialdir              = /data/users/jalabi/Internship_NII/speechbrain/recipes/VoxLingua107/lang_id_fleur
+output                  = /data/users/jalabi/Internship_NII/speechbrain/recipes/VoxLingua107/lang_id_fleur/logs/shrd.$(ClusterId).$(ProcId).$(Year)_$(Month)_$(Day)_$(SUBMIT_TIME).out
+error                   = /data/users/jalabi/Internship_NII/speechbrain/recipes/VoxLingua107/lang_id_fleur/logs/shrd.$(ClusterId).$(ProcId).$(Year)_$(Month)_$(Day)_$(SUBMIT_TIME).err
+log                     = /data/users/jalabi/Internship_NII/speechbrain/recipes/VoxLingua107/lang_id_fleur/logs/shrd.$(ClusterId).$(ProcId).$(Year)_$(Month)_$(Day)_$(SUBMIT_TIME).out
+request_GPUs = 0
+request_CPUs = 2
+request_memory = 15G
+requirements = (GPUs_GlobalMemoryMb >= 5000) && (machine == "cl18lx.lsv.uni-saarland.de")
+queue

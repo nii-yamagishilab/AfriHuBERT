@@ -1,0 +1,125 @@
+universe                = docker
+docker_image            = alabijesujoba/zmm-tts:v2
+executable              = /data/users/jalabi/Internship_NII/Data/scripts/download/asr/get_all_duration.sh
+initialdir              = /data/users/jalabi/Internship_NII/Data/scripts/download/asr/
+output                  = /data/users/jalabi/Internship_NII/Data/scripts/download/asr/logs/dur2.$(ClusterId).$(ProcId).$(Year)_$(Month)_$(Day)_$(SUBMIT_TIME).out
+error                   = /data/users/jalabi/Internship_NII/Data/scripts/download/asr/logs/dur2.$(ClusterId).$(ProcId).$(Year)_$(Month)_$(Day)_$(SUBMIT_TIME).err
+log                     = /data/users/jalabi/Internship_NII/Data/scripts/download/asr/logs/dur2.$(ClusterId).$(ProcId).$(Year)_$(Month)_$(Day)_$(SUBMIT_TIME).out
+request_GPUs = 0
+request_CPUs = 2
+request_memory = 10G
+requirements = (GPUs_GlobalMemoryMb >= 5000) && (machine == "cl16lx.lsv.uni-saarland.de")
+
+arguments = afr
+queue
+
+arguments = aka1
+queue
+
+arguments = aka2
+queue
+
+arguments = amh
+queue
+
+arguments = ara
+queue
+
+arguments = bem
+queue
+
+arguments = eng
+queue
+
+arguments = ewe
+queue
+
+arguments = fra
+queue
+
+arguments = fuc
+queue
+
+arguments = hau
+queue
+
+arguments = ibo
+queue
+
+arguments = kin
+queue
+
+arguments = lin
+queue
+
+arguments = loz
+queue
+
+arguments = lug
+queue
+
+arguments = lun
+queue
+
+arguments = mlg
+queue
+
+arguments = nbl
+queue
+
+arguments = nico
+queue
+
+arguments = nico_dev
+queue
+
+arguments = nso
+queue
+
+arguments = nya
+queue
+
+arguments = por
+queue
+
+arguments = sna
+queue
+
+arguments = som
+queue
+
+arguments = sot
+queue
+
+arguments = srr
+queue
+
+arguments = ssw
+queue
+
+arguments = swh
+queue
+
+arguments = toi
+queue
+
+arguments = tsn
+queue
+
+arguments = tso
+queue
+
+arguments = ven
+queue
+
+arguments = wol
+queue
+
+arguments = xho
+queue
+
+arguments = yor
+queue
+
+arguments = zul
+queue
