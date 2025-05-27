@@ -1,0 +1,26 @@
+universe                = docker
+docker_image            = alabijesujoba/spbrainsm:v12
+executable              = AfriHuBERT/downstream-eval/LID/train_lid_seed.sh
+initialdir              = AfriHuBERT/downstream-eval/
+output                  = AfriHuBERT/downstream-eval/LID/logs/exp_mn_seed.$(ClusterId).$(ProcId).$(Year)_$(Month)_$(Day)_$(SUBMIT_TIME).log
+error                   = AfriHuBERT/downstream-eval/LID/logs/exp_mn_seed.$(ClusterId).$(ProcId).$(Year)_$(Month)_$(Day)_$(SUBMIT_TIME).out
+log                     = AfriHuBERT/downstream-eval/LID/logs/exp_mn_seed.$(ClusterId).$(ProcId).$(Year)_$(Month)_$(Day)_$(SUBMIT_TIME).err
+request_GPUs = 1
+request_CPUs = 4
+request_memory = 50G
+requirements = (GPUs_GlobalMemoryMb >= 39000) && (machine == "cl18lx.lsv.uni-saarland.de")
+
+arguments = mms_300m
+queue
+
+arguments = afrihubert6
+queue
+
+arguments = mhubert_147
+queue
+
+arguments = ssa_hubert_60k
+queue
+
+arguments = xlsr_lg_300m
+queue

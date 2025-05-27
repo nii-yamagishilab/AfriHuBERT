@@ -1,1 +1,0 @@
-/data/users/jalabi/Internship_NII/speechbrain/recipes/AfroLID_FLEURS/results/experiment1/mhubert_147/1988/save/CKPT+2024-07-17+16-08-45+00/custom_interface_ecapa1.py
