@@ -12,12 +12,15 @@ This is the code for the AfriHuBERT submitted to the [Interspeech 2025](https://
 <br>
 <p align="center">
     <img src="images/afrihubert_sources.png" width="95%"> <br>
-    Overview
+    Datasets used for training AfriHuBERT (after filtering and preprocessing the aggregated data), the amount of languages covered, the total duration, the domain of the data, the speech type, and licenses.
 </p>
 <be>
       
 ## Language Coverage
 AfriHuBERT covers 1,230 languages in total including 1,226 indigenous African languages
+
+## To do
+- [x] Scripts for .
 
 ## Acknowledgements
 This work was conducted during the first author’s internship at NII, Japan. This study is partially supported by JST AIP Acceleration Research (JPMJCR24U3). Part of this study was carried out using the TSUBAME4.0 supercomputer at the Institute of Science Tokyo. Also, we thank Xin Wang, Badr M. Abdullah, Siyang Wang, Wanying Ge, David Adelani, and Aravind Krishnan for their helpful feedback.
@@ -35,3 +38,6 @@ This work was conducted during the first author’s internship at NII, Japan. Th
 }
 
 ```
+## License
+The code in this repository is released under the BSD-3-Clause license as found in the LICENSE file.
+The model is released under CC-BY-NC-SA 4.0 license.
