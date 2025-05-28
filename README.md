@@ -16,10 +16,13 @@ This is the code for the AfriHuBERT submitted to the [Interspeech 2025](https://
 </p>
 <be>
       
-### Language Coverage
+## Language Coverage
 AfriHuBERT covers 1,230 languages in total including 1,226 indigenous African languages
 
-### BibTeX entry and citation info.
+## Acknowledgements
+This work was conducted during the first author’s internship at NII, Japan. This study is partially supported by JST AIP Acceleration Research (JPMJCR24U3). Part of this study was carried out using the TSUBAME4.0 supercomputer at the Institute of Science Tokyo. Also, we thank Xin Wang, Badr M. Abdullah, Siyang Wang, Wanying Ge, David Adelani, and Aravind Krishnan for their helpful feedback.
+
+## BibTeX entry and citation info.
 ```
 @misc{alabi2024afrihubertselfsupervisedspeechrepresentation,
       title={AfriHuBERT: A self-supervised speech representation model for African languages}, 
