@@ -7,9 +7,15 @@ This is the code for the AfriHuBERT submitted to the [Interspeech 2025](https://
 
 
 ## Pretraining data
-- Dataset: AfriHuBERT was trained on data from 11 major sources, including BibleTTS, Kallaama, MMS Ulab v2, NaijaVoices, and NCHLT. All sources and their licenses are shown in the table below. Please refer to the paper for more information. 
-![Logo](images/afrihubert_sources.png)
+- Dataset: AfriHuBERT was trained on data from 11 major sources, including BibleTTS, Kallaama, MMS Ulab v2, NaijaVoices, and NCHLT. All sources and their licenses are shown in the table below. Please refer to the paper for more information.
 
+<br>
+<p align="center">
+    <img src="images/afrihubert_sources.png" width="95%"> <br>
+    Overview
+</p>
+<be>
+      
 ### Language Coverage
 AfriHuBERT covers 1,230 languages in total including 1,226 indigenous African languages
 
