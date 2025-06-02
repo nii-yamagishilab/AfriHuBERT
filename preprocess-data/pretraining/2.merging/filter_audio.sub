@@ -1,0 +1,13 @@
+universe                = docker
+docker_image            = alabijesujoba/zmm-tts:v2
+executable              = /data/users/jalabi/Internship_NII/Data/scripts/download/asr/filter_audio.sh
+initialdir              = /data/users/jalabi/Internship_NII/Data/scripts/download/asr/
+output                  = /data/users/jalabi/Internship_NII/Data/scripts/download/asr/logs/filter.$(ClusterId).$(ProcId).$(Year)_$(Month)_$(Day)_$(SUBMIT_TIME).out
+error                   = /data/users/jalabi/Internship_NII/Data/scripts/download/asr/logs/filter.$(ClusterId).$(ProcId).$(Year)_$(Month)_$(Day)_$(SUBMIT_TIME).err
+log                     = /data/users/jalabi/Internship_NII/Data/scripts/download/asr/logs/filter.$(ClusterId).$(ProcId).$(Year)_$(Month)_$(Day)_$(SUBMIT_TIME).out
+request_GPUs = 0
+request_CPUs = 2
+request_memory = 10G
+requirements = (GPUs_GlobalMemoryMb >= 5000) && (machine == "cl16lx.lsv.uni-saarland.de")
+
+queue

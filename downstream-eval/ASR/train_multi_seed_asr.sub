@@ -1,0 +1,30 @@
+universe                = docker
+docker_image            = alabijesujoba/spbrainsmx:v8
+executable              = AfriHuBERT/downstream-eval/ASR/train_multi_seed_asr.sh
+initialdir              = AfriHuBERT/downstream-eval/
+output                  = AfriHuBERT/downstream-eval/ASR/logs/train.$(ClusterId).$(ProcId).$(Year)_$(Month)_$(Day)_$(SUBMIT_TIME).out
+error                   = AfriHuBERT/downstream-eval/ASR/logs/train.$(ClusterId).$(ProcId).$(Year)_$(Month)_$(Day)_$(SUBMIT_TIME).err
+log                     = AfriHuBERT/downstream-eval/ASR/logs/train.$(ClusterId).$(ProcId).$(Year)_$(Month)_$(Day)_$(SUBMIT_TIME).log
+request_GPUs = 1
+request_CPUs = 2
+request_memory = 32G
+requirements = (GPUs_GlobalMemoryMb >= 32000) && (machine == "cl18lx.lsv.uni-saarland.de")
+
+
+arguments = mhubert_147 mainasr_data_asr_10m 1
+queue
+#
+arguments = mhubert_147 mainasr_data_asr_30m 1
+queue
+#
+arguments = mhubert_147 mainasr_data_asr_3h 1
+queue
+#
+arguments = afrihubert6 mainasr_data_asr_10m 1
+queue
+
+arguments = afrihubert6 mainasr_data_asr_30m 1
+queue
+#
+arguments = afrihubert6 mainasr_data_asr_3h 1
+queue

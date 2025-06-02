@@ -1,0 +1,186 @@
+################################
+# Model: language identification with Wav2Vec/HuBERT
+# Authors: Jesujoba Alabi, 2024
+
+# Adapted from : Tanel Alumäe, 2021
+# ################################
+
+# Basic parameters data_unif_lid
+seed: 2
+__set_seed: !apply:torch.manual_seed [!ref <seed>]
+__set_seed2: !apply:torch.cuda.manual_seed [!ref <seed>]
+__set_seed3: !apply:random.seed [!ref <seed>]
+__set_seed4: !apply:numpy.random.seed [!ref <seed>]
+output_url: /data/users/jalabi/Internship_NII/speechbrain/recipes/AfroLID_FLEURS/results/
+output_folder: !ref <output_url>/mainlid/mhubert3/<seed>
+save_folder: !ref <output_folder>/save
+train_log: !ref <output_folder>/train_log.txt
+data_folder: 
+  /data/users/jalabi/Internship_NII/speechbrain/recipes/AfroLID_FLEURS/data_unif_lid/aug
+
+shards_url: 
+  /data/users/jalabi/Internship_NII/speechbrain/recipes/AfroLID_FLEURS/data_unif_lid
+train_meta: !ref <shards_url>/train/meta.json
+val_meta: !ref <shards_url>/dev/meta.json
+train_shards: !ref <shards_url>/train/shard-{000000..000008}.tar
+val_shards: !ref <shards_url>/dev/shard-{000000..000002}.tar
+
+# Data for augmentation
+NOISE_DATASET_URL: 
+  https://www.dropbox.com/scl/fi/a09pj97s5ifan81dqhi4n/noises.zip?rlkey=j8b0n9kdjdr32o1f06t0cw5b7&dl=1
+RIR_DATASET_URL: 
+  https://www.dropbox.com/scl/fi/linhy77c36mu10965a836/RIRs.zip?rlkey=pg9cu8vrpn2u173vhiqyu743u&dl=1
+data_folder_noise: !ref <data_folder>/noise # The noisy sequences for data augmentation will automatically be downloaded here.
+data_folder_rir: !ref <data_folder>/rir # The impulse responses used for data augmentation will automatically be downloaded here.
+noise_annotation: !ref <save_folder>/noise.csv
+rir_annotation: !ref <save_folder>/rir.csv
+
+
+# Set to directory on a large disk if you are training on Webdataset shards hosted on the web
+shard_cache_dir:
+
+wav2vec2_hub: 
+  /data/users/jalabi/Internship_NII/pretrain/fairseq/examples/hubert/afrihubert/hf_checkpoints/final/mhubert20
+wav2vec2_folder: !ref <save_folder>/hubert
+
+ckpt_interval_minutes: 5
+
+
+####################### Training Parameters ####################################
+number_of_epochs: 20
+sample_rate: 16000
+sentence_len: 3 # seconds
+batch_size: 32
+batch_size_val: 16
+lr: 0.001
+lr_wav2vec2: 0.00001
+num_workers: 1
+
+#freeze all wav2vec2
+freeze_wav2vec2: false
+#set to true to freeze the CONV part of the wav2vec2 model
+# We see an improvement of 2% with freezing CNNs
+freeze_wav2vec2_conv: false
+
+############################## Augmentations ###################################
+
+# Download and prepare the dataset of noisy sequences for augmentation
+prepare_noise_data: !name:speechbrain.augment.preparation.prepare_dataset_from_URL
+  URL: !ref <NOISE_DATASET_URL>
+  dest_folder: !ref <data_folder_noise>
+  ext: wav
+  csv_file: !ref <noise_annotation>
+
+# Download and prepare the dataset of room impulse responses for augmentation
+prepare_rir_data: !name:speechbrain.augment.preparation.prepare_dataset_from_URL
+  URL: !ref <RIR_DATASET_URL>
+  dest_folder: !ref <data_folder_rir>
+  ext: wav
+  csv_file: !ref <rir_annotation>
+
+# Add reverberation to input signal
+add_reverb: !new:speechbrain.augment.time_domain.AddReverb
+  csv_file: !ref <rir_annotation>
+  reverb_sample_rate: !ref <sample_rate>
+  clean_sample_rate: !ref <sample_rate>
+  num_workers: !ref <num_workers>
+
+# Add noise to input signal
+add_noise: !new:speechbrain.augment.time_domain.AddNoise
+  csv_file: !ref <noise_annotation>
+  snr_low: 0
+  snr_high: 15
+  noise_sample_rate: !ref <sample_rate>
+  clean_sample_rate: !ref <sample_rate>
+  num_workers: !ref <num_workers>
+
+# Speed perturbation
+speed_perturb: !new:speechbrain.augment.time_domain.SpeedPerturb
+  orig_freq: !ref <sample_rate>
+
+# Augmenter: Combines previously defined augmentations to perform data augmentation
+wav_augment: !new:speechbrain.augment.augmenter.Augmenter
+  concat_original: true
+  shuffle_augmentations: true
+  min_augmentations: 3
+  max_augmentations: 3
+  augmentations: [!ref <add_reverb>, !ref <add_noise>, !ref <speed_perturb>]
+
+####################### Model Parameters #######################################
+encoder_dim: 768
+
+# Number of emotions
+out_n_neurons: 25 # (af, am, ar, )
+
+train_dataloader_options:
+  num_workers: 1
+  batch_size: !ref <batch_size>
+
+val_dataloader_options:
+  num_workers: 1
+  batch_size: !ref <batch_size_val>
+
+# Wav2vec2 encoder
+wav2vec2: !new:speechbrain.lobes.models.huggingface_transformers.wav2vec2.Wav2Vec2
+  source: !ref <wav2vec2_hub>
+  output_norm: true
+  freeze: !ref <freeze_wav2vec2>
+  freeze_feature_extractor: !ref <freeze_wav2vec2_conv>
+  save_path: !ref <wav2vec2_folder>
+
+epoch_counter: !new:speechbrain.utils.epoch_loop.EpochCounter
+  limit: !ref <number_of_epochs>
+
+attentive: !new:speechbrain.lobes.models.ECAPA_TDNN.AttentiveStatisticsPooling
+  channels: 768
+  attention_channels: 64
+
+classifier: !new:speechbrain.lobes.models.Xvector.Classifier
+  input_shape: [null, null, 1536]
+  activation: !name:torch.nn.LeakyReLU
+  lin_blocks: 1
+  lin_neurons: 512
+  out_neurons: !ref <out_n_neurons>
+
+modules:
+  wav2vec2: !ref <wav2vec2>
+  attentive: !ref <attentive>
+  classifier: !ref <classifier>
+
+model: !new:torch.nn.ModuleList
+- [!ref <attentive>, !ref <classifier>]
+compute_cost: !name:speechbrain.nnet.losses.nll_loss
+
+error_stats: !name:speechbrain.utils.metric_stats.MetricStats
+  metric: !name:speechbrain.nnet.losses.classification_error
+    reduction: batch
+
+opt_class: !name:torch.optim.Adam
+  lr: !ref <lr>
+
+wav2vec2_opt_class: !name:torch.optim.Adam
+  lr: !ref <lr_wav2vec2>
+
+lr_annealing: !new:speechbrain.nnet.schedulers.NewBobScheduler
+  initial_value: !ref <lr>
+  improvement_threshold: 0.0025
+  annealing_factor: 0.9
+  patient: 0
+
+lr_annealing_wav2vec2: !new:speechbrain.nnet.schedulers.NewBobScheduler
+  initial_value: !ref <lr_wav2vec2>
+  improvement_threshold: 0.0025
+  annealing_factor: 0.9
+
+# Logging + checkpoints
+train_logger: !new:speechbrain.utils.train_logger.FileTrainLogger
+  save_file: !ref <train_log>
+
+checkpointer: !new:speechbrain.utils.checkpoints.Checkpointer
+  checkpoints_dir: !ref <save_folder>
+  recoverables:
+    model: !ref <model>
+    wav2vec2: !ref <wav2vec2>
+    lr_annealing_output: !ref <lr_annealing>
+    lr_annealing_wav2vec2: !ref <lr_annealing_wav2vec2>
+    counter: !ref <epoch_counter>
