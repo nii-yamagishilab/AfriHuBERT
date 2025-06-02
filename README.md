@@ -1,6 +1,6 @@
 # AfriHuBERT: A self-supervised speech representation model for African languages
 
-<a href='https://arxiv.org/abs/2409.20201'><img src='https://img.shields.io/badge/Paper-Arxiv-red'></a>
+
 
 ## Introduction
 This is the code for the AfriHuBERT accepted by Interspeech 2025 
